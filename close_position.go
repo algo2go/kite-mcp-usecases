@@ -95,7 +95,7 @@ func (uc *ClosePositionUseCase) Execute(ctx context.Context, email, exchange, sy
 			continue
 		}
 		if strings.EqualFold(p.Exchange, exchange) && strings.EqualFold(p.Tradingsymbol, symbol) {
-			if productFilter != "" && strings.ToUpper(p.Product) != strings.ToUpper(productFilter) {
+			if productFilter != "" && !strings.EqualFold(p.Product, productFilter) {
 				continue
 			}
 			matched = &positions.Net[i]

@@ -368,9 +368,9 @@ func TestCloseAllPositions_WithEvents(t *testing.T) {
 
 func TestGetPortfolio_HoldingsError(t *testing.T) {
 	t.Parallel()
-	client := &mockBrokerClient{}
-	// Override GetHoldings to return error.
-	client.holdings = nil
+	// holdingsErrClient is a separate mock that returns an error on
+	// GetHoldings (see mocks_test.go). We wire it directly into the
+	// resolver — no mockBrokerClient instance is needed for this test.
 	resolver := &mockBrokerResolver{client: &holdingsErrClient{}}
 	uc := NewGetPortfolioUseCase(resolver, testLogger())
 

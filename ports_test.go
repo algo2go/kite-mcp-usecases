@@ -45,9 +45,13 @@ func TestBrokerResolver_ContractInterfaceShape(t *testing.T) {
 	// The two var assertions above provide compile-time guarantees.
 	// This test exercises the concrete witnesses through the
 	// interface to ensure the method set is reachable at runtime.
+	// (A nil-check on the interface here would be a tautology because
+	// the typed-concrete &mockBrokerResolver{} is non-nil; the
+	// nilness checker flags that as impossible. We dispatch through
+	// the method set instead — that's the actual runtime witness.)
 	var resolver BrokerResolver = &mockBrokerResolver{}
-	if resolver == nil {
-		t.Fatal("expected non-nil interface holding typed mock")
+	if _, err := resolver.GetBrokerForEmail("contract-shape@example.com"); err != nil {
+		t.Fatalf("expected nil error from zero-value mockBrokerResolver, got %v", err)
 	}
 }
 
